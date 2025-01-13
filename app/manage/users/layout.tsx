@@ -1,5 +1,5 @@
 "use client";
-import FormModal from "@/components/FormModal";
+import { PatientForm, UserForm } from "@/components/FormModal";
 import TabsWrapper from "@/components/UserTab";
 import React, { createContext, useContext, useState } from "react";
 
@@ -44,7 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     >
       <TabsWrapper />
       {children}
-      <FormModal />
+      {type === "patients" ? <PatientForm /> : <UserForm />}
     </SearchContext.Provider>
   );
 };

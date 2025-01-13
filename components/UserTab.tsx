@@ -4,7 +4,7 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   alpha,
   Button,
@@ -38,6 +38,17 @@ function a11yProps(index: number) {
 function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const router = useRouter();
+  const pathname = usePathname();
+
+  React.useEffect(() => {
+    if (pathname.includes("patients")) {
+      setValue(0);
+    } else if (pathname.includes("owners")) {
+      setValue(1);
+    } else if (pathname.includes("staffs")) {
+      setValue(2);
+    }
+  }, [pathname]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -115,7 +126,7 @@ function BasicTabs() {
 // }));
 
 function Buttons() {
-  const { selectedRows, isModalOpen, handleModalOpen, handleModalClose } =
+  const { selectedRows, handleModalOpen } =
     useSearchContext();
 
   const handleDeleteSelected = () => {

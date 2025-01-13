@@ -94,9 +94,9 @@ export const filterOptions = (type: string, selectedCity: string) => {
   }
   if (type === "owners") {
     return {
-      city: ["yangon", "mandalay"],
+      city: ["Yangon", "Mandalay"],
       township: selectedCity
-        ? selectedCity === "yangon"
+        ? selectedCity === "Yangon"
           ? yangonTownships
           : mandalayTownships
         : [],

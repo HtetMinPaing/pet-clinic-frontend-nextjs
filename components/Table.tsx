@@ -3,7 +3,8 @@
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { fetchOwners, fetchUsers } from "@/api/fetchAPI";
+import { fetchOwners } from "@/api/fetchAPI";
+import { fetchPatients } from "@/api/patientAPI";
 import { Button, colors, IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { useSearchContext } from "@/app/manage/users/layout";
@@ -35,6 +36,8 @@ const OwnerColumns: GridColDef[] = [
   { field: "email", headerName: "Email", width: 200 },
   { field: "contactPhone", headerName: "Phone", width: 150 },
   { field: "address", headerName: "Address", width: 200 },
+  { field: "township", headerName: "Township", width: 150 },
+  { field: "city", headerName: "City", width: 150 },
   {
     field: "actions",
     headerName: "Actions",
@@ -85,7 +88,7 @@ export default function DataTable({ type }: { type: string }) {
   const [paginationModel, setPaginationModel] =
     React.useState<GridPaginationModel>({
       page: 0,
-      pageSize: 1,
+      pageSize: 10,
     });
   const [loading, setLoading] = React.useState(false);
   const { setSelectedRows, search, setType, status, breed, city, township } =
@@ -96,7 +99,7 @@ export default function DataTable({ type }: { type: string }) {
       setLoading(true);
       const data =
         type === "patients"
-          ? await fetchUsers({
+          ? await fetchPatients({
               type,
               size: paginationModel.pageSize,
               page: paginationModel.page,
@@ -108,6 +111,8 @@ export default function DataTable({ type }: { type: string }) {
               type,
               size: paginationModel.pageSize,
               page: paginationModel.page,
+              city: city,
+              township: township
             });
       setRows(data.content);
       setRowCount(data.totalElements);
@@ -115,7 +120,7 @@ export default function DataTable({ type }: { type: string }) {
       setLoading(false);
     };
     fetch();
-  }, [paginationModel, search, type, status, breed]);
+  }, [paginationModel, search, type, status, breed, city, township]);
 
   return (
     <Paper sx={{ height: "100%", width: "100%" }}>
