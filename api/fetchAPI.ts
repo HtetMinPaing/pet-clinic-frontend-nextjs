@@ -2,19 +2,21 @@ export const fetchOwners = async ({
   type,
   size,
   page,
+  search,
   city,
   township
 }: {
   type: string;
   size: number;
   page: string;
+  search: string,
   city: string;
   township: string
 }) => {
   const response = await fetch(
     `http://localhost:8080/api/owner/all/pages?size=${size || 20}&page=${
       page || 0
-    }${city && "&city="+city}${township && "&township="+township}`,
+  }${search && "&search="+search}${city && "&city="+city}${township && "&township="+township}`,
     {
       method: "GET",
       headers: {

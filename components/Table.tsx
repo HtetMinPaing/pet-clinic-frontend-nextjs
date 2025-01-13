@@ -111,6 +111,7 @@ export default function DataTable({ type }: { type: string }) {
               type,
               size: paginationModel.pageSize,
               page: paginationModel.page,
+              search: search,
               city: city,
               township: township
             });
