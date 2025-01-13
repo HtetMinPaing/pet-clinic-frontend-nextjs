@@ -4,8 +4,10 @@ import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { fetchOwners, fetchUsers } from "@/api/fetchAPI";
-import { Button, IconButton, Menu, MenuItem } from "@mui/material";
+import { Button, colors, IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
+import { useSearchContext } from "@/app/manage/users/layout";
+import FormModal from "./FormModal";
 
 const PatientColumns: GridColDef[] = [
   { field: "id", headerName: "Pet ID", width: 70 },
@@ -76,7 +78,7 @@ const ActionsMenu = ({ row }) => {
   );
 };
 
-export default function DataTable({ type }) {
+export default function DataTable({ type }: { type: string }) {
   const columns = type === "patients" ? PatientColumns : OwnerColumns;
   const [rows, setRows] = React.useState([]);
   const [rowCount, setRowCount] = React.useState(0);
@@ -86,7 +88,8 @@ export default function DataTable({ type }) {
       pageSize: 1,
     });
   const [loading, setLoading] = React.useState(false);
-  const [selectedRows, setSelectedRows] = React.useState([]);
+  const { setSelectedRows, search, setType, status, breed, city, township } =
+    useSearchContext();
 
   React.useEffect(() => {
     const fetch = async () => {
@@ -97,6 +100,9 @@ export default function DataTable({ type }) {
               type,
               size: paginationModel.pageSize,
               page: paginationModel.page,
+              search: search,
+              status: status,
+              breed: breed,
             })
           : await fetchOwners({
               type,
@@ -105,40 +111,14 @@ export default function DataTable({ type }) {
             });
       setRows(data.content);
       setRowCount(data.totalElements);
+      setType(type);
       setLoading(false);
     };
     fetch();
-  }, [paginationModel]);
-
-  const handleEditSelected = () => {
-    console.log("Edit selected rows:", selectedRows);
-  };
-
-  const handleDeleteSelected = () => {
-    console.log("Delete selected rows:", selectedRows);
-  };
+  }, [paginationModel, search, type, status, breed]);
 
   return (
     <Paper sx={{ height: "100%", width: "100%" }}>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
-        <Button
-          variant="outlined"
-          color="primary"
-          disabled={selectedRows.length === 0}
-          onClick={handleEditSelected}
-          sx={{ marginRight: 1 }}
-        >
-          Edit Selected
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          disabled={selectedRows.length === 0}
-          onClick={handleDeleteSelected}
-        >
-          Delete Selected
-        </Button>
-      </div>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -149,8 +129,43 @@ export default function DataTable({ type }) {
         pageSizeOptions={[1, 10, 20, 50]}
         loading={loading}
         checkboxSelection
-        onRowSelectionModelChange={(newSelection) => setSelectedRows(newSelection)}
-        sx={{ border: 0 }}
+        // onRowSelectionModelChange={handleRowSelectionChange}
+        onRowSelectionModelChange={(newSelection) => {
+          setSelectedRows(newSelection); // Update selected rows
+        }}
+        sx={{
+          border: 0,
+          "& .MuiDataGrid-scrollbar--vertical": {
+            "&::-webkit-scrollbar": {
+              width: "8px", // Vertical scrollbar width
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888", // Vertical scrollbar thumb color
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555", // Hover effect for thumb
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1", // Track color for vertical
+            },
+          },
+          "& .MuiDataGrid-scrollbar--horizontal": {
+            "&::-webkit-scrollbar": {
+              height: "8px", // Horizontal scrollbar height
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888", // Horizontal scrollbar thumb color
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555", // Hover effect for thumb
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1", // Track color for horizontal
+            },
+          },
+        }}
       />
     </Paper>
   );
