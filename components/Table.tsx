@@ -49,6 +49,7 @@ const OwnerColumns: GridColDef[] = [
 
 const ActionsMenu = ({ row }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { handleModalOpen } = useSearchContext();
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -58,8 +59,9 @@ const ActionsMenu = ({ row }) => {
     setAnchorEl(null);
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     console.log("Edit row:", row);
+    handleModalOpen("update", row);
     handleClose();
   };
 
@@ -113,7 +115,7 @@ export default function DataTable({ type }: { type: string }) {
               page: paginationModel.page,
               search: search,
               city: city,
-              township: township
+              township: township,
             });
       setRows(data.content);
       setRowCount(data.totalElements);

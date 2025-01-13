@@ -51,7 +51,7 @@ const style = {
   margin: "0 auto",
 };
 
-const PawrentInput = ({ onPawrentSelect }) => {
+const PawrentInput = ({ value, onPawrentSelect }) => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -101,11 +101,13 @@ const PawrentInput = ({ onPawrentSelect }) => {
       onChange={(event, value) => {
         onPawrentSelect(value); // Pass selected pawrent to parent component
       }}
+      value={value}
       loading={loading}
       renderInput={(params) => (
         <TextField
           {...params}
           label="Search Pawrent by Email"
+          value={value}
           variant="outlined"
           placeholder="Enter email"
           InputProps={{
@@ -158,12 +160,13 @@ export const UserForm = () => {
 
   return (
     <Modal
-      open={isModalOpen}
+      open={isModalOpen.isOpen}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box component="form" onSubmit={handleSubmit} sx={style}>
+        {isModalOpen.type}
         <FormControl fullWidth>
           <TextField
             label="Full Name"
@@ -282,15 +285,15 @@ export const UserForm = () => {
 };
 
 export const PatientForm = () => {
-  const [formData, setFormData] = useState({
-    petName: "",
-    status: "",
-    breed: "",
-    gender: "",
-    dateOfBirth: "",
-    pawrent: "",
-  });
   const { isModalOpen, handleModalClose } = useSearchContext();
+  const [formData, setFormData] = useState({
+    petName: isModalOpen.rowData.petName || "",
+    status: isModalOpen.rowData.status || "",
+    breed: isModalOpen.rowData.breed || "",
+    gender: isModalOpen.rowData.gender || "",
+    dateOfBirth: isModalOpen.rowData.dateOfBirth || "",
+    pawrent: isModalOpen.rowData.pawrentEmail || "",
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -314,12 +317,13 @@ export const PatientForm = () => {
 
   return (
     <Modal
-      open={isModalOpen}
+      open={isModalOpen.isOpen}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box component="form" onSubmit={handleSubmit} sx={style}>
+        {isModalOpen.type}
         <FormControl fullWidth>
           <TextField
             label="Pet Name"
@@ -402,6 +406,7 @@ export const PatientForm = () => {
           />
         </FormControl>
         <PawrentInput
+          value={formData.pawrent}
           onPawrentSelect={(selectedPawrent) =>
             setFormData((prev) => ({
               ...prev,
@@ -410,7 +415,7 @@ export const PatientForm = () => {
           }
         />
         <Button variant="contained" type="submit">
-          Submit
+          {isModalOpen.type}
         </Button>
       </Box>
     </Modal>

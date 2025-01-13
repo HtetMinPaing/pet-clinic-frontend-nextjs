@@ -133,13 +133,17 @@ function Buttons() {
     console.log("Delete selected rows:", selectedRows);
   };
 
+  const handleAddModalOpen = () => {
+    handleModalOpen("add", null);
+  }
+
   return (
     <div>
       <Button
         variant="contained"
         color="primary"
         sx={{ height: "53px" }}
-        onClick={handleModalOpen}
+        onClick={handleAddModalOpen}
       >
         Add Patient
       </Button>

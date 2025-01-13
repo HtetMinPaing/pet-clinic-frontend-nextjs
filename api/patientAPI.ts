@@ -65,23 +65,44 @@ export const fetchPatients = async ({
 };
 
 export const addPatient = async (patientData) => {
-    const pawrentEmail = patientData.pawrent;
-    const payload = {
-        ...patientData,
-        pawrent: {
-            email: pawrentEmail
-        }
-    }
-  const response = await fetch(
-    "http://localhost:8080/api/patient/add",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload)
+  const pawrentEmail = patientData.pawrent;
+  const payload = {
+    ...patientData,
+    pawrent: {
+      email: pawrentEmail,
     },
-  );
+  };
+  const response = await fetch("http://localhost:8080/api/patient/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
+
+  const data = await response.json();
+  console.log(data);
+};
+
+export const updatePatient = async ({id, updateData}) => {
+  const pawrentEmail = updateData.pawrent;
+  const payload = {
+    ...updateData,
+    pawrent: {
+      email: pawrentEmail,
+    },
+  };
+  const response = await fetch(`http://localhost:8080/api/patient/update/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error);

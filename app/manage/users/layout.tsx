@@ -17,9 +17,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [breed, setBreed] = useState("");
   const [city, setCity] = useState("");
   const [township, setTownship] = useState("");
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const handleModalOpen = () => setIsModalOpen(true);
-  const handleModalClose = () => setIsModalOpen(false);
+  const [isModalOpen, setIsModalOpen] = React.useState({
+    type: "",
+    isOpen: false,
+    rowData: {},
+  });
+  const handleModalOpen = (type, data) => setIsModalOpen({
+    type: type,
+    isOpen: true,
+    rowData: data
+  });
+  const handleModalClose = () => setIsModalOpen({
+    type: "",
+    isOpen: false,
+    rowData: {}
+  });
   return (
     <SearchContext.Provider
       value={{
