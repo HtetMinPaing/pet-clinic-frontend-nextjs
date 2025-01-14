@@ -4,7 +4,7 @@ import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { fetchOwners } from "@/api/fetchAPI";
-import { fetchPatients } from "@/api/patientAPI";
+import { deletePatient, fetchPatients } from "@/api/patientAPI";
 import { Button, colors, IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { useSearchContext } from "@/app/manage/users/layout";
@@ -76,8 +76,9 @@ const ActionsMenu = ({ row }) => {
     handleClose();
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log("Delete row:", data);
+    await deletePatient(data.id);
     setIsDialogOpen(false);
     handleClose();
   };

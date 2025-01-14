@@ -111,3 +111,16 @@ export const updatePatient = async (id, updateData) => {
   const data = await response.json();
   console.log(data);
 };
+
+export const deletePatient = async (id) => {
+  const response = await fetch(`http://localhost:8080/api/patient/delete/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
+};
