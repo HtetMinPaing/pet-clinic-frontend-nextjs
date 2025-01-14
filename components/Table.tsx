@@ -9,6 +9,7 @@ import { Button, colors, IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { useSearchContext } from "@/app/manage/users/layout";
 import FormModal from "./FormModal";
+import DialogBox from "./DialogBox";
 
 const PatientColumns: GridColDef[] = [
   { field: "id", headerName: "Pet ID", width: 70 },
@@ -49,7 +50,18 @@ const OwnerColumns: GridColDef[] = [
 
 const ActionsMenu = ({ row }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const { handleModalOpen } = useSearchContext();
+
+  const data = {
+    id: row.id,
+    petName: row.petName,
+    status: row.status,
+    breed: row.breed,
+    gender: row.gender,
+    dateOfBirth: row.dateOfBirth,
+    pawrentEmail: row.pawrentEmail,
+  }
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,21 +72,13 @@ const ActionsMenu = ({ row }) => {
   };
 
   const handleEdit = async () => {
-    const data = {
-      id: row.id,
-      petName: row.petName,
-      status: row.status,
-      breed: row.breed,
-      gender: row.gender,
-      dateOfBirth: row.dateOfBirth,
-      pawrentEmail: row.pawrentEmail,
-    }
     handleModalOpen("update", data);
     handleClose();
   };
 
   const handleDelete = () => {
-    console.log("Delete row:", row);
+    console.log("Delete row:", data);
+    setIsDialogOpen(false);
     handleClose();
   };
 
@@ -85,8 +89,9 @@ const ActionsMenu = ({ row }) => {
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={handleEdit}>Edit</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={() => setIsDialogOpen(true)}>Delete</MenuItem>
       </Menu>
+      <DialogBox isDialogOpen={isDialogOpen} closeDialog={() => setIsDialogOpen(false)} confirmDelete={handleDelete} />
     </div>
   );
 };

@@ -47,8 +47,9 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  // border: "2px solid #000",
   boxShadow: 24,
+  borderRadius: 4,
   p: 4,
   gap: 2,
   margin: "0 auto",
@@ -342,7 +343,17 @@ export const PatientForm = () => {
       aria-describedby="modal-modal-description"
     >
       <Box component="form" onSubmit={handleSubmit} sx={style}>
-        <Typography variant="h2">{isModalOpen.type}</Typography>
+        <Typography
+          variant="h5"
+          textAlign="center"
+          fontWeight="bold"
+          color={isModalOpen.type === "update" ? "warning" : "primary"}
+          gutterBottom
+        >
+          {isModalOpen.type === "update"
+            ? "Update existing patient"
+            : "Add new patient"}
+        </Typography>
         <FormControl fullWidth>
           <TextField
             label="Pet Name"
