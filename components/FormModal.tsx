@@ -1,10 +1,9 @@
 "use client";
 
 import { addUser, findPawrentByEmail } from "@/api/fetchAPI";
-import { addPatient } from "@/api/patientAPI";
+import { addPatient, updatePatient } from "@/api/patientAPI";
 import { useSearchContext } from "@/app/manage/users/layout";
 import { breeds, mandalayTownships, yangonTownships } from "@/constants/utils";
-import { CheckBox, Label } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
@@ -18,6 +17,7 @@ import {
   Modal,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
@@ -313,7 +313,10 @@ export const PatientForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Form Data: ", formData);
-    const data = await addPatient(formData);
+    const data =
+      isModalOpen.type === "update"
+        ? await updatePatient(isModalOpen.rowData.id, formData)
+        : await addPatient(formData);
     console.log("Submit Data: ", data);
     handleClose();
   };
@@ -339,7 +342,7 @@ export const PatientForm = () => {
       aria-describedby="modal-modal-description"
     >
       <Box component="form" onSubmit={handleSubmit} sx={style}>
-        {isModalOpen.type}
+        <Typography variant="h2">{isModalOpen.type}</Typography>
         <FormControl fullWidth>
           <TextField
             label="Pet Name"

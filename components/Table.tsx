@@ -60,8 +60,16 @@ const ActionsMenu = ({ row }) => {
   };
 
   const handleEdit = async () => {
-    console.log("Edit row:", row);
-    handleModalOpen("update", row);
+    const data = {
+      id: row.id,
+      petName: row.petName,
+      status: row.status,
+      breed: row.breed,
+      gender: row.gender,
+      dateOfBirth: row.dateOfBirth,
+      pawrentEmail: row.pawrentEmail,
+    }
+    handleModalOpen("update", data);
     handleClose();
   };
 

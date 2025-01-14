@@ -88,8 +88,8 @@ export const addPatient = async (patientData) => {
   console.log(data);
 };
 
-export const updatePatient = async ({id, updateData}) => {
-  const pawrentEmail = updateData.pawrent;
+export const updatePatient = async (id, updateData) => {
+  const pawrentEmail = updateData.pawrentEmail;
   const payload = {
     ...updateData,
     pawrent: {
@@ -97,7 +97,7 @@ export const updatePatient = async ({id, updateData}) => {
     },
   };
   const response = await fetch(`http://localhost:8080/api/patient/update/${id}`, {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
