@@ -124,3 +124,17 @@ export const deletePatient = async (id) => {
     throw new Error(error);
   }
 };
+
+export const deleteSelectedPatient = async (ids) => {
+  const response = await fetch(`http://localhost:8080/api/patient/delete/selected`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ids)
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
+};

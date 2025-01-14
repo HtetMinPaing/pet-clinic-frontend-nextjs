@@ -21,6 +21,8 @@ import {
 import { useSearchContext } from "@/app/manage/users/layout";
 import SearchIcon from "@mui/icons-material/Search";
 import { filterOptions } from "@/constants/utils";
+import DialogBox from "./DialogBox";
+import { deleteSelectedPatient } from "@/api/patientAPI";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -126,16 +128,18 @@ function BasicTabs() {
 // }));
 
 function Buttons() {
-  const { selectedRows, handleModalOpen } =
-    useSearchContext();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const { selectedRows, handleModalOpen } = useSearchContext();
 
-  const handleDeleteSelected = () => {
+  const handleDeleteSelected = async () => {
     console.log("Delete selected rows:", selectedRows);
+    await deleteSelectedPatient(selectedRows);
+    setIsDialogOpen(false)
   };
 
   const handleAddModalOpen = () => {
     handleModalOpen("add", null);
-  }
+  };
 
   return (
     <div>
@@ -152,10 +156,15 @@ function Buttons() {
         color="error"
         sx={{ height: "53px" }}
         disabled={selectedRows.length === 0}
-        onClick={handleDeleteSelected}
+        onClick={() => setIsDialogOpen(true)}
       >
         Delete Selected
       </Button>
+      <DialogBox
+        isDialogOpen={isDialogOpen}
+        closeDialog={() => setIsDialogOpen(false)}
+        confirmDelete={handleDeleteSelected}
+      />
     </div>
   );
 }
