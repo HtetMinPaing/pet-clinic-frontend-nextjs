@@ -4,12 +4,15 @@ import { addUser, findPawrentByEmail } from "@/api/fetchAPI";
 import { addPatient } from "@/api/patientAPI";
 import { useSearchContext } from "@/app/manage/users/layout";
 import { breeds, mandalayTownships, yangonTownships } from "@/constants/utils";
+import { CheckBox, Label } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Modal,
@@ -51,7 +54,7 @@ const style = {
   margin: "0 auto",
 };
 
-const PawrentInput = ({ value, onPawrentSelect }) => {
+const PawrentInput = ({ isDisable, email, onPawrentSelect }) => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -95,19 +98,18 @@ const PawrentInput = ({ value, onPawrentSelect }) => {
   return (
     <Autocomplete
       freeSolo
+      disabled={isDisable}
       options={options}
       getOptionLabel={(option) => option.email}
       onInputChange={handleInputChange}
       onChange={(event, value) => {
         onPawrentSelect(value); // Pass selected pawrent to parent component
       }}
-      value={value}
       loading={loading}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Search Pawrent by Email"
-          value={value}
+          label={email ? email : "Search Pawrent by Email"}
           variant="outlined"
           placeholder="Enter email"
           InputProps={{
@@ -287,13 +289,26 @@ export const UserForm = () => {
 export const PatientForm = () => {
   const { isModalOpen, handleModalClose } = useSearchContext();
   const [formData, setFormData] = useState({
-    petName: isModalOpen.rowData.petName || "",
-    status: isModalOpen.rowData.status || "",
-    breed: isModalOpen.rowData.breed || "",
-    gender: isModalOpen.rowData.gender || "",
-    dateOfBirth: isModalOpen.rowData.dateOfBirth || "",
-    pawrent: isModalOpen.rowData.pawrentEmail || "",
+    petName: "",
+    status: "",
+    breed: "",
+    gender: "",
+    dateOfBirth: "",
+    pawrentEmail: "",
   });
+  const [isDisable, setIsDisable] = useState(false);
+
+  useEffect(() => {
+    if (isModalOpen.rowData) {
+      setFormData({ ...isModalOpen.rowData });
+    }
+    if (isModalOpen.type === "update") {
+      setIsDisable(true);
+    }
+    console.log("Testing: ", formData);
+    console.log("Context testing: ", isModalOpen.rowData);
+    console.log("Disable: ", isDisable);
+  }, [isModalOpen]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -310,8 +325,9 @@ export const PatientForm = () => {
       breed: "",
       gender: "",
       dateOfBirth: "",
-      pawrent: "",
+      pawrentEmail: "",
     });
+    setIsDisable(false);
     handleModalClose();
   };
 
@@ -405,16 +421,34 @@ export const PatientForm = () => {
             required
           />
         </FormControl>
+        {isModalOpen.type === "update" && (
+          <FormControl fullWidth>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!isDisable}
+                  onChange={() => setIsDisable(!isDisable)}
+                />
+              }
+              label="Are you sure to update owner?"
+            />
+          </FormControl>
+        )}
         <PawrentInput
-          value={formData.pawrent}
+          isDisable={isDisable}
+          email={formData.pawrentEmail}
           onPawrentSelect={(selectedPawrent) =>
             setFormData((prev) => ({
               ...prev,
-              pawrent: selectedPawrent.email,
+              pawrentEmail: selectedPawrent.email,
             }))
           }
         />
-        <Button variant="contained" type="submit">
+        <Button
+          variant="contained"
+          color={isModalOpen.type === "update" ? "warning" : "primary"}
+          type="submit"
+        >
           {isModalOpen.type}
         </Button>
       </Box>

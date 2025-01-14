@@ -65,7 +65,7 @@ export const fetchPatients = async ({
 };
 
 export const addPatient = async (patientData) => {
-  const pawrentEmail = patientData.pawrent;
+  const pawrentEmail = patientData.pawrentEmail;
   const payload = {
     ...patientData,
     pawrent: {
