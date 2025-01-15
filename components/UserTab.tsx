@@ -17,6 +17,7 @@ import {
   Select,
   styled,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useSearchContext } from "@/app/manage/users/layout";
 import SearchIcon from "@mui/icons-material/Search";
@@ -150,19 +151,19 @@ function Buttons() {
   };
 
   return (
-    <div>
+    <Box display="flex" flexDirection="row" flexWrap="wrap" gap="0.75rem">
       <Button
         variant="contained"
         color="primary"
-        sx={{ height: "53px" }}
         onClick={handleAddModalOpen}
+        sx={{ typography: "subtitle2", color: "white", padding: "0.6rem" }}
       >
-        Add Patient
+        Add New {type === "patients" ? " Patient" : " Pawrent"}
       </Button>
       <Button
         variant="outlined"
         color="error"
-        sx={{ height: "53px" }}
+        sx={{ typography: "subtitle2", padding: "0.6rem" }}
         disabled={selectedRows.length === 0}
         onClick={() => setIsDialogOpen(true)}
       >
@@ -173,7 +174,7 @@ function Buttons() {
         closeDialog={() => setIsDialogOpen(false)}
         confirmDelete={handleDeleteSelected}
       />
-    </div>
+    </Box>
   );
 }
 
@@ -189,6 +190,15 @@ function SearchInput() {
     <TextField
       variant="outlined"
       placeholder="Search..."
+      sx={{
+        "& .MuiInputBase-input": {
+          color: "black", // Input text color
+          typography: "subtitle2",
+        },
+        "& .MuiInputBase-input::placeholder": {
+          color: "rgba(68, 68, 68, 0.5)", // Placeholder text color
+        },
+      }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -235,19 +245,29 @@ function SelectDropDown({ label, options }) {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-select-small-label">{label}</InputLabel>
+      <InputLabel
+        id="demo-select-small-label"
+        sx={{ typography: "subtitle2", color: "black" }}
+      >
+        {label}
+      </InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
         // value={}
         label={label}
         onChange={handleChange}
+        sx={{ typography: "subtitle2", color: "black" }}
       >
-        <MenuItem value="">
+        <MenuItem value="" sx={{ typography: "subtitle2", color: "black" }}>
           <em>None</em>
         </MenuItem>
         {options.map((option) => (
-          <MenuItem key={option} value={option}>
+          <MenuItem
+            key={option}
+            value={option}
+            sx={{ typography: "subtitle2", color: "black" }}
+          >
             {option}
           </MenuItem>
         ))}
