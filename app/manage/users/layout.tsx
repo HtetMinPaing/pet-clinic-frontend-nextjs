@@ -1,6 +1,7 @@
 "use client";
 import { PatientForm, UserForm } from "@/components/FormModal";
 import TabsWrapper from "@/components/UserTab";
+import { Alert, Snackbar } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
 
 const SearchContext = createContext<any>(null);
@@ -22,16 +23,22 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     isOpen: false,
     rowData: {},
   });
-  const handleModalOpen = (type, data) => setIsModalOpen({
-    type: type,
-    isOpen: true,
-    rowData: data
-  });
-  const handleModalClose = () => setIsModalOpen({
-    type: "",
+  const [alert, setAlert] = useState({
     isOpen: false,
-    rowData: {}
+    description: "",
   });
+  const handleModalOpen = (type, data) =>
+    setIsModalOpen({
+      type: type,
+      isOpen: true,
+      rowData: data,
+    });
+  const handleModalClose = () =>
+    setIsModalOpen({
+      type: "",
+      isOpen: false,
+      rowData: {},
+    });
   return (
     <SearchContext.Provider
       value={{
@@ -51,12 +58,29 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         setTownship,
         isModalOpen,
         handleModalOpen,
-        handleModalClose
+        handleModalClose,
+        alert,
+        setAlert,
       }}
     >
       <TabsWrapper />
       {children}
       {type === "patients" ? <PatientForm /> : <UserForm />}
+      {alert.isOpen && (
+        <Snackbar
+          open={alert.isOpen}
+          onClose={() => setAlert({ isOpen: false, description: "" })}
+          autoHideDuration={5000}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        >
+          <Alert
+            severity="success"
+            onClose={() => setAlert({ isOpen: false, description: "" })}
+          >
+            {alert.description}
+          </Alert>
+        </Snackbar>
+      )}
     </SearchContext.Provider>
   );
 };

@@ -51,7 +51,7 @@ const OwnerColumns: GridColDef[] = [
 const ActionsMenu = ({ row }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const { handleModalOpen } = useSearchContext();
+  const { handleModalOpen, setAlert } = useSearchContext();
 
   const data = {
     id: row.id,
@@ -79,6 +79,10 @@ const ActionsMenu = ({ row }) => {
   const handleDelete = async () => {
     console.log("Delete row:", data);
     await deletePatient(data.id);
+    setAlert({
+      isOpen: true,
+      description: "Patient delete sucessfully",
+    });
     setIsDialogOpen(false);
     handleClose();
   };

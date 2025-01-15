@@ -288,7 +288,7 @@ export const UserForm = () => {
 };
 
 export const PatientForm = () => {
-  const { isModalOpen, handleModalClose } = useSearchContext();
+  const { isModalOpen, handleModalClose, setAlert } = useSearchContext();
   const [formData, setFormData] = useState({
     petName: "",
     status: "",
@@ -318,6 +318,13 @@ export const PatientForm = () => {
       isModalOpen.type === "update"
         ? await updatePatient(isModalOpen.rowData.id, formData)
         : await addPatient(formData);
+    setAlert({
+      isOpen: true,
+      description:
+        isModalOpen.type === "update"
+          ? "Patient Update successfully"
+          : "Patient register sucessfully",
+    });
     console.log("Submit Data: ", data);
     handleClose();
   };
