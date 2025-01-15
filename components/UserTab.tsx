@@ -129,12 +129,13 @@ function BasicTabs() {
 
 function Buttons() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const { selectedRows, handleModalOpen , setAlert} = useSearchContext();
+  const { selectedRows, handleModalOpen, handleAlertOpen } = useSearchContext();
 
   const handleDeleteSelected = async () => {
     console.log("Delete selected rows:", selectedRows);
     await deleteSelectedPatient(selectedRows);
-    setIsDialogOpen(false)
+    handleAlertOpen("Delete selected patients successfully");
+    setIsDialogOpen(false);
   };
 
   const handleAddModalOpen = () => {
@@ -156,10 +157,7 @@ function Buttons() {
         color="error"
         sx={{ height: "53px" }}
         disabled={selectedRows.length === 0}
-        onClick={() => {
-          setIsDialogOpen(true);
-          setAlert({ isOpen: true, description: "Delete selected patients successfully"})
-        }}
+        onClick={() => setIsDialogOpen(true)}
       >
         Delete Selected
       </Button>

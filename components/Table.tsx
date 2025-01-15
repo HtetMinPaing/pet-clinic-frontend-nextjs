@@ -3,7 +3,7 @@
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { fetchOwners } from "@/api/fetchAPI";
+import { fetchOwners } from "@/api/userAPI";
 import { deletePatient, fetchPatients } from "@/api/patientAPI";
 import { Button, colors, IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
@@ -51,7 +51,7 @@ const OwnerColumns: GridColDef[] = [
 const ActionsMenu = ({ row }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const { handleModalOpen, setAlert } = useSearchContext();
+  const { handleModalOpen, handleAlertOpen } = useSearchContext();
 
   const data = {
     id: row.id,
@@ -79,10 +79,7 @@ const ActionsMenu = ({ row }) => {
   const handleDelete = async () => {
     console.log("Delete row:", data);
     await deletePatient(data.id);
-    setAlert({
-      isOpen: true,
-      description: "Patient delete sucessfully",
-    });
+    handleAlertOpen( "Patient delete sucessfully");
     setIsDialogOpen(false);
     handleClose();
   };

@@ -39,6 +39,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       isOpen: false,
       rowData: {},
     });
+  const handleAlertOpen = (dialog: string) => {
+    setAlert({
+      isOpen: true,
+      description: dialog
+    })
+  }
+  const handleAlertClose = () => {
+    setAlert({
+      isOpen: false,
+      description: ""
+    })
+  }
   return (
     <SearchContext.Provider
       value={{
@@ -60,7 +72,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         handleModalOpen,
         handleModalClose,
         alert,
-        setAlert,
+        handleAlertOpen,
+        handleAlertClose,
       }}
     >
       <TabsWrapper />
@@ -69,13 +82,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {alert.isOpen && (
         <Snackbar
           open={alert.isOpen}
-          onClose={() => setAlert({ isOpen: false, description: "" })}
+          onClose={handleAlertClose}
           autoHideDuration={5000}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
           <Alert
             severity="success"
-            onClose={() => setAlert({ isOpen: false, description: "" })}
+            onClose={handleAlertClose}
           >
             {alert.description}
           </Alert>

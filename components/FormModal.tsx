@@ -1,6 +1,7 @@
 "use client";
 
-import { addUser, findPawrentByEmail } from "@/api/fetchAPI";
+import { findPawrentByEmail } from "@/api/userAPI";
+import { addUser } from "@/api/userAPI";
 import { addPatient, updatePatient } from "@/api/patientAPI";
 import { useSearchContext } from "@/app/manage/users/layout";
 import { breeds, mandalayTownships, yangonTownships } from "@/constants/utils";
@@ -288,7 +289,7 @@ export const UserForm = () => {
 };
 
 export const PatientForm = () => {
-  const { isModalOpen, handleModalClose, setAlert } = useSearchContext();
+  const { isModalOpen, handleModalClose, handleAlertOpen } = useSearchContext();
   const [formData, setFormData] = useState({
     petName: "",
     status: "",
@@ -318,13 +319,11 @@ export const PatientForm = () => {
       isModalOpen.type === "update"
         ? await updatePatient(isModalOpen.rowData.id, formData)
         : await addPatient(formData);
-    setAlert({
-      isOpen: true,
-      description:
-        isModalOpen.type === "update"
-          ? "Patient Update successfully"
-          : "Patient register sucessfully",
-    });
+    handleAlertOpen(
+      isModalOpen.type === "update"
+        ? "Patient Update successfully"
+        : "Patient register sucessfully"
+    );
     console.log("Submit Data: ", data);
     handleClose();
   };

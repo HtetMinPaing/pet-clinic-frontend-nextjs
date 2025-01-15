@@ -4,19 +4,21 @@ export const fetchOwners = async ({
   page,
   search,
   city,
-  township
+  township,
 }: {
   type: string;
   size: number;
   page: string;
-  search: string,
+  search: string;
   city: string;
-  township: string
+  township: string;
 }) => {
   const response = await fetch(
     `http://localhost:8080/api/owner/all/pages?size=${size || 20}&page=${
       page || 0
-  }${search && "&search="+search}${city && "&city="+city}${township && "&township="+township}`,
+    }${search && "&search=" + search}${city && "&city=" + city}${
+      township && "&township=" + township
+    }`,
     {
       method: "GET",
       headers: {
@@ -40,7 +42,7 @@ export const fetchOwners = async ({
     contactPhone: item.contactPhone || "N/A",
     address: item.address || "N/A",
     township: item.township || "N/A",
-    city: item.city || "N/A"
+    city: item.city || "N/A",
   }));
 
   return {
@@ -66,15 +68,61 @@ export const addUser = async (userData) => {
   console.log(data);
 };
 
+export const updateUser = async (id, updateData) => {
+  const response = await fetch(`http://localhost:8080/api/owner/update/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updateData),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
 
-export const findPawrentByEmail = async (email: string) => {
-  const response = await fetch(`http://localhost:8080/api/owner/all/pages?email=${email}`, {
-    method: "GET",
+  const data = await response.json();
+  console.log(data);
+};
+
+export const deleteUser = async (id) => {
+  const response = await fetch(`http://localhost:8080/api/owner/delete/${id}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
   });
-  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
+};
+
+export const deleteSelectedUser = async (ids) => {
+  const response = await fetch(`http://localhost:8080/api/owner/delete`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ids)
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error);
+  }
+};
+
+export const findPawrentByEmail = async (email: string) => {
+  const response = await fetch(
+    `http://localhost:8080/api/owner/all/pages?email=${email}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error);
