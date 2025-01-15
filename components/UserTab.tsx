@@ -23,6 +23,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { filterOptions } from "@/constants/utils";
 import DialogBox from "./DialogBox";
 import { deleteSelectedPatient } from "@/api/patientAPI";
+import { deleteSelectedUser } from "@/api/userAPI";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -129,12 +130,18 @@ function BasicTabs() {
 
 function Buttons() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const { selectedRows, handleModalOpen, handleAlertOpen } = useSearchContext();
+  const { selectedRows, handleModalOpen, handleAlertOpen, type } =
+    useSearchContext();
 
   const handleDeleteSelected = async () => {
     console.log("Delete selected rows:", selectedRows);
-    await deleteSelectedPatient(selectedRows);
-    handleAlertOpen("Delete selected patients successfully");
+    if (type === "patients") {
+      await deleteSelectedPatient(selectedRows);
+      handleAlertOpen("Delete selected patients successfully");
+    } else {
+      await deleteSelectedUser(selectedRows);
+      handleAlertOpen("Delete selected pawrents successfully");
+    }
     setIsDialogOpen(false);
   };
 

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { fetchOwners } from "@/api/userAPI";
+import { deleteUser, fetchOwners } from "@/api/userAPI";
 import { deletePatient, fetchPatients } from "@/api/patientAPI";
 import { Button, colors, IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
@@ -51,17 +51,20 @@ const OwnerColumns: GridColDef[] = [
 const ActionsMenu = ({ row }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const { handleModalOpen, handleAlertOpen } = useSearchContext();
+  const { handleModalOpen, handleAlertOpen, type } = useSearchContext();
 
-  const data = {
-    id: row.id,
-    petName: row.petName,
-    status: row.status,
-    breed: row.breed,
-    gender: row.gender,
-    dateOfBirth: row.dateOfBirth,
-    pawrentEmail: row.pawrentEmail,
-  }
+  const data =
+    type === "patients"
+      ? {
+          id: row.id,
+          petName: row.petName,
+          status: row.status,
+          breed: row.breed,
+          gender: row.gender,
+          dateOfBirth: row.dateOfBirth,
+          pawrentEmail: row.pawrentEmail,
+        }
+      : { ...row };
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -78,8 +81,13 @@ const ActionsMenu = ({ row }) => {
 
   const handleDelete = async () => {
     console.log("Delete row:", data);
-    await deletePatient(data.id);
-    handleAlertOpen( "Patient delete sucessfully");
+    if (type === "patients") {
+      await deletePatient(data.id);
+      handleAlertOpen("Patient delete sucessfully");
+    } else {
+      await deleteUser(data.id);
+      handleAlertOpen("Pawrent delete sucessfully");
+    }
     setIsDialogOpen(false);
     handleClose();
   };
@@ -93,7 +101,11 @@ const ActionsMenu = ({ row }) => {
         <MenuItem onClick={handleEdit}>Edit</MenuItem>
         <MenuItem onClick={() => setIsDialogOpen(true)}>Delete</MenuItem>
       </Menu>
-      <DialogBox isDialogOpen={isDialogOpen} closeDialog={() => setIsDialogOpen(false)} confirmDelete={handleDelete} />
+      <DialogBox
+        isDialogOpen={isDialogOpen}
+        closeDialog={() => setIsDialogOpen(false)}
+        confirmDelete={handleDelete}
+      />
     </div>
   );
 };

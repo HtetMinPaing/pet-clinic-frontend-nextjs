@@ -1,6 +1,6 @@
 "use client";
 
-import { findPawrentByEmail } from "@/api/userAPI";
+import { findPawrentByEmail, updateUser } from "@/api/userAPI";
 import { addUser } from "@/api/userAPI";
 import { addPatient, updatePatient } from "@/api/patientAPI";
 import { useSearchContext } from "@/app/manage/users/layout";
@@ -139,12 +139,28 @@ export const UserForm = () => {
     city: "",
     township: "",
   });
-  const { isModalOpen, handleModalClose } = useSearchContext();
+  const { isModalOpen, handleModalClose, handleAlertOpen } = useSearchContext();
+
+  useEffect(() => {
+    if (isModalOpen.rowData && Object.keys(isModalOpen.rowData).length > 0) {
+      setFormData({ ...isModalOpen.rowData });
+    }
+    console.log("Testing: ", formData);
+    console.log("Context testing: ", isModalOpen.rowData);
+  }, [isModalOpen]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Form Data: ", formData);
-    const data = await addUser(formData);
+    const data =
+      isModalOpen.type === "update"
+        ? await updateUser(isModalOpen.rowData.id, formData)
+        : await addUser(formData);
+    handleAlertOpen(
+      isModalOpen.type === "update"
+        ? "Pawrent Update successfully"
+        : "Pawrent register sucessfully"
+    );
     console.log("Submit Data: ", data);
     handleClose();
   };
@@ -170,7 +186,9 @@ export const UserForm = () => {
       aria-describedby="modal-modal-description"
     >
       <Box component="form" onSubmit={handleSubmit} sx={style}>
-        {isModalOpen.type}
+        {isModalOpen.type === "update"
+          ? "Update existing pawrent"
+          : "Add new pawrent"}
         <FormControl fullWidth>
           <TextField
             label="Full Name"
@@ -280,8 +298,12 @@ export const UserForm = () => {
             required
           />
         </FormControl>
-        <Button variant="contained" type="submit">
-          Submit
+        <Button
+          variant="contained"
+          color={isModalOpen.type === "update" ? "warning" : "primary"}
+          type="submit"
+        >
+          {isModalOpen.type}
         </Button>
       </Box>
     </Modal>
@@ -301,7 +323,7 @@ export const PatientForm = () => {
   const [isDisable, setIsDisable] = useState(false);
 
   useEffect(() => {
-    if (isModalOpen.rowData) {
+    if (isModalOpen.rowData && Object.keys(isModalOpen.rowData).length > 0) {
       setFormData({ ...isModalOpen.rowData });
     }
     if (isModalOpen.type === "update") {
