@@ -98,8 +98,18 @@ const ActionsMenu = ({ row }) => {
         <MoreVert />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={handleEdit}>Edit</MenuItem>
-        <MenuItem onClick={() => setIsDialogOpen(true)}>Delete</MenuItem>
+        <MenuItem
+          onClick={handleEdit}
+          sx={{ typography: "subtitle2", color: "black" }}
+        >
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => setIsDialogOpen(true)}
+          sx={{ typography: "subtitle2", color: "black" }}
+        >
+          Delete
+        </MenuItem>
       </Menu>
       <DialogBox
         isDialogOpen={isDialogOpen}
@@ -164,43 +174,10 @@ export default function DataTable({ type }: { type: string }) {
         pageSizeOptions={[1, 10, 20, 50]}
         loading={loading}
         checkboxSelection
-        // onRowSelectionModelChange={handleRowSelectionChange}
         onRowSelectionModelChange={(newSelection) => {
           setSelectedRows(newSelection); // Update selected rows
         }}
-        sx={{
-          border: 0,
-          "& .MuiDataGrid-scrollbar--vertical": {
-            "&::-webkit-scrollbar": {
-              width: "8px", // Vertical scrollbar width
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888", // Vertical scrollbar thumb color
-              borderRadius: "4px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555", // Hover effect for thumb
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f1f1f1", // Track color for vertical
-            },
-          },
-          "& .MuiDataGrid-scrollbar--horizontal": {
-            "&::-webkit-scrollbar": {
-              height: "8px", // Horizontal scrollbar height
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888", // Horizontal scrollbar thumb color
-              borderRadius: "4px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555", // Hover effect for thumb
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f1f1f1", // Track color for horizontal
-            },
-          },
-        }}
+        sx={{ border: 0 }}
       />
     </Paper>
   );

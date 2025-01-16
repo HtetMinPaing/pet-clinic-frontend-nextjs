@@ -56,6 +56,64 @@ const style = {
   margin: "0 auto",
 };
 
+const textFieldStyle = {
+  "& .MuiInputLabel-root": {
+    fontSize: '1rem',
+    color: "fade", // Label color
+  },
+  "& .MuiOutlinedInput-root": {
+    borderColor: "#54BAB9", // Border color
+  },
+  "& .MuiOutlinedInput-root.Mui-focused": {
+    borderColor: "#54BAB9", // Focused border color
+  },
+  "& .MuiInputBase-input": {
+    fontSize: "1rem", // Input text size
+    color: "#444444", // Text color
+  },
+};
+
+const inputLabelStyle = { color: "fade", fontSize: "1rem", fontWeight: 600 };
+
+const selectStyle = {
+  "& .MuiOutlinedInput-root": {
+    borderColor: "#54BAB9", // Border color
+  },
+  "& .MuiOutlinedInput-root.Mui-focused": {
+    borderColor: "#54BAB9", // Focused border color
+  },
+  "& .MuiInputBase-input": {
+    fontSize: "1rem", // Font size for input text
+    color: "#444444", // Text color
+  },
+};
+
+const menuStyle = { fontSize: "0.875rem", color: "#444444" };
+
+const pawrentInputStyle = {
+  '& .MuiInputBase-root': {
+    fontSize: '1rem', // Text input size
+    color: '#444444', // Input text color
+  },
+  '& .MuiOutlinedInput-root': {
+    borderColor: '#54BAB9', // Border color
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#54BAB9', // Border color on hover
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#54BAB9', // Border color when focused
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: '#444444', // Label text color
+    fontSize: '1rem', // Label font size
+    fontWeight: 600, // Label font weight
+  },
+  '& .MuiAutocomplete-inputRoot': {
+    paddingRight: '35px', // Add space for the loading spinner
+  },
+};
+
 const PawrentInput = ({ isDisable, email, onPawrentSelect }) => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -114,6 +172,7 @@ const PawrentInput = ({ isDisable, email, onPawrentSelect }) => {
           label={email ? email : "Search Pawrent by Email"}
           variant="outlined"
           placeholder="Enter email"
+          sx={pawrentInputStyle}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -372,10 +431,9 @@ export const PatientForm = () => {
     >
       <Box component="form" onSubmit={handleSubmit} sx={style}>
         <Typography
-          variant="h5"
+          variant="body1"
           textAlign="center"
-          fontWeight="bold"
-          color={isModalOpen.type === "update" ? "warning" : "primary"}
+          color={isModalOpen.type === "update" ? "#EDC339" : "primary"}
           gutterBottom
         >
           {isModalOpen.type === "update"
@@ -391,11 +449,14 @@ export const PatientForm = () => {
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, petName: e.target.value }))
             }
+            sx={textFieldStyle}
             required
           />
         </FormControl>
         <FormControl fullWidth>
-          <InputLabel id="status-label">Status</InputLabel>
+          <InputLabel id="status-label" sx={inputLabelStyle}>
+            Status
+          </InputLabel>
           <Select
             labelId="status-label"
             id="status"
@@ -405,14 +466,21 @@ export const PatientForm = () => {
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, status: e.target.value }))
             }
+            sx={selectStyle}
             required
           >
-            <MenuItem value={"picky_eater"}>Picky eater</MenuItem>
-            <MenuItem value={"allergy"}>Allergy</MenuItem>
+            <MenuItem value={"picky_eater"} sx={menuStyle}>
+              Picky eater
+            </MenuItem>
+            <MenuItem value={"allergy"} sx={menuStyle}>
+              Allergy
+            </MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <InputLabel id="breed">Breed</InputLabel>
+          <InputLabel id="breed" sx={inputLabelStyle}>
+            Breed
+          </InputLabel>
           <Select
             labelId="breed"
             id="breed"
@@ -422,17 +490,20 @@ export const PatientForm = () => {
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, breed: e.target.value }))
             }
+            sx={selectStyle}
             required
           >
             {breeds.map((breed) => (
-              <MenuItem value={breed} key={breed}>
+              <MenuItem value={breed} key={breed} sx={menuStyle}>
                 {breed}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <InputLabel id="gender">Gender</InputLabel>
+          <InputLabel id="gender" sx={inputLabelStyle}>
+            Gender
+          </InputLabel>
           <Select
             labelId="gender"
             id="gender"
@@ -442,10 +513,15 @@ export const PatientForm = () => {
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, gender: e.target.value }))
             }
+            sx={selectStyle}
             required
           >
-            <MenuItem value={"male"}>Male</MenuItem>
-            <MenuItem value={"female"}>Female</MenuItem>
+            <MenuItem value={"male"} sx={menuStyle}>
+              Male
+            </MenuItem>
+            <MenuItem value={"female"} sx={menuStyle}>
+              Female
+            </MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
@@ -457,6 +533,7 @@ export const PatientForm = () => {
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, dateOfBirth: e.target.value }))
             }
+            sx={textFieldStyle}
             InputLabelProps={{
               shrink: true, // Ensures the label stays above the input
             }}
@@ -470,9 +547,22 @@ export const PatientForm = () => {
                 <Checkbox
                   checked={!isDisable}
                   onChange={() => setIsDisable(!isDisable)}
+                  sx={{
+                    color: "#54BAB9", // Checkbox color
+                    "&.Mui-checked": {
+                      color: "#54BAB9", // Color when checked
+                    },
+                  }}
                 />
               }
               label="Are you sure to update owner?"
+              sx={{
+                "& .MuiFormControlLabel-label": {
+                  fontSize: "1rem", // Font size for the label
+                  fontWeight: 600, // Font weight for the label
+                  color: "#444444", // Label text color
+                },
+              }}
             />
           </FormControl>
         )}

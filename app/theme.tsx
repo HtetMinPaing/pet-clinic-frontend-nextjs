@@ -2,6 +2,7 @@
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { fontGrid } from "@mui/material/styles/cssUtils";
 
 const theme = createTheme({
   palette: {
@@ -21,6 +22,7 @@ const theme = createTheme({
       fade: "rgba(68, 68, 68, 0.5)",
       primary: "#54BAB9",
       white: "#ffffff",
+      edit: "#EDC339",
     },
   },
   typography: {
@@ -52,6 +54,89 @@ const theme = createTheme({
     caption: {
       fontSize: "0.75rem", // 12px
       fontWeight: 400, // Regular
+    },
+  },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          "& .MuiDataGrid-columnHeaderTitle": {
+            color: "#54BAB9",
+            fontSize: "0.875rem",
+            fontWeight: 600,
+            fontFamily: "'Poppins', Roboto, Arial, sans-serif",
+          },
+          "& .MuiDataGrid-cell": {
+            color: "#000000",
+            fontSize: "0.875rem",
+            fontWeight: 400,
+            fontFamily: "'Poppins', Roboto, Arial, sans-serif",
+          },
+          "& .MuiTablePagination-toolbar": {
+            color: "#000000",
+          },
+          "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows": {
+            color: "#000000",
+            fontSize: "0.875rem",
+            fontWeight: 400,
+          },
+          "& .MuiTablePagination-select": {
+            color: "#000000",
+            fontSize: "0.875rem",
+            fontWeight: 400, 
+          },
+          "& .MuiTablePagination-selectIcon": {
+            color: "#54BAB9", // Dropdown arrow color
+          },
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "#EDF7F6", // Background color for hovered rows
+          },
+          "& .MuiDataGrid-selectedRowCount": {
+            color: "#000000",
+            fontSize: "0.875rem",
+            fontWeight: 400,
+          },
+          "& .MuiDataGrid-scrollbar--vertical": {
+            "&::-webkit-scrollbar": {
+              width: "8px", // Vertical scrollbar width
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888", // Vertical scrollbar thumb color
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555", // Hover effect for thumb
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1", // Track color for vertical
+            },
+          },
+          "& .MuiDataGrid-scrollbar--horizontal": {
+            "&::-webkit-scrollbar": {
+              height: "8px", // Horizontal scrollbar height
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888", // Horizontal scrollbar thumb color
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555", // Hover effect for thumb
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1", // Track color for horizontal
+            },
+          },
+        },
+      },
+    },
+    MuiTablePagination: {
+      styleOverrides: {
+        menuItem:{
+          color: "#000000",
+          fontSize: "0.875rem",
+          fontWeight: 400, 
+        }
+      }
     },
   },
 });
