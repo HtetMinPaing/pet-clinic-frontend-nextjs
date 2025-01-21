@@ -25,6 +25,7 @@ import { filterOptions } from "@/constants/utils";
 import DialogBox from "./DialogBox";
 import { deleteSelectedPatient } from "@/api/patientAPI";
 import { deleteSelectedUser } from "@/api/userAPI";
+import { deleteSelectedDoctors } from "@/api/doctorAPI";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,7 +50,7 @@ function BasicTabs() {
       setValue(0);
     } else if (pathname.includes("owners")) {
       setValue(1);
-    } else if (pathname.includes("staffs")) {
+    } else if (pathname.includes("doctors")) {
       setValue(2);
     }
   }, [pathname]);
@@ -64,7 +65,7 @@ function BasicTabs() {
         router.push("/manage/users/owners");
         break;
       case 2:
-        router.push("/manage/users/staffs");
+        router.push("/manage/users/doctors");
         break;
       default:
         router.push("/manage/users");
@@ -82,7 +83,7 @@ function BasicTabs() {
         >
           <Tab label="Patients" {...a11yProps(0)} />
           <Tab label="Owners" {...a11yProps(1)} />
-          <Tab label="Staffs" {...a11yProps(2)} />
+          <Tab label="Doctors" {...a11yProps(2)} />
         </Tabs>
       </Box>
     </Box>
@@ -139,9 +140,12 @@ function Buttons() {
     if (type === "patients") {
       await deleteSelectedPatient(selectedRows);
       handleAlertOpen("Delete selected patients successfully");
-    } else {
+    } else if (type === "owners") {
       await deleteSelectedUser(selectedRows);
       handleAlertOpen("Delete selected pawrents successfully");
+    } else {
+      await deleteSelectedDoctors(selectedRows);
+      handleAlertOpen("Delete selected doctors successfully");
     }
     setIsDialogOpen(false);
   };
@@ -158,7 +162,7 @@ function Buttons() {
         onClick={handleAddModalOpen}
         sx={{ typography: "subtitle2", color: "white", padding: "0.6rem" }}
       >
-        Add New {type === "patients" ? " Patient" : " Pawrent"}
+        Add New {type.charAt(0).toUpperCase() + type.slice(1,-1)}
       </Button>
       <Button
         variant="outlined"

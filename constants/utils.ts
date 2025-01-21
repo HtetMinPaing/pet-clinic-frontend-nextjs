@@ -92,7 +92,7 @@ export const filterOptions = (type: string, selectedCity: string) => {
       breed: breeds,
     };
   }
-  if (type === "owners") {
+  if (type === "owners" || type === "doctors") {
     return {
       city: ["Yangon", "Mandalay"],
       township: selectedCity

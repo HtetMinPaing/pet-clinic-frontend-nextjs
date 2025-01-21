@@ -9,6 +9,15 @@ const theme = createTheme({
     primary: {
       main: "#54BAB9",
     },
+    warning: {
+      main: "#EDC339",
+    },
+    error: {
+      main: "#CD211D",
+    },
+    success: {
+      main: "#1AB45D",
+    },
     background: {
       primary: "#54BAB9",
       warm: "#EDC339",
@@ -22,7 +31,6 @@ const theme = createTheme({
       fade: "rgba(68, 68, 68, 0.5)",
       primary: "#54BAB9",
       white: "#ffffff",
-      edit: "#EDC339",
     },
   },
   typography: {
@@ -57,6 +65,44 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: ({ ownerState }) => {
+          if (ownerState.type) {
+            return {
+              "& .MuiInputLabel-root": {
+                fontSize: "0.875rem",
+                color: "fade", // Label color
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor:
+                    ownerState.type === "add" ? "#76C9C7" : "#FFC857", // Hover border color
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor:
+                    ownerState.type === "add" ? "#54BAB9" : "#EDC339", // Focused border color
+                },
+              },
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                borderColor: ownerState.type === "add" ? "#54BAB9" : "#EDC339", // Focused border color
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: ownerState.type === "add" ? "#54BAB9" : "#EDC339", // Label color when focused
+              },
+              "& .MuiOutlinedInput-root:hover .MuiInputLabel-root": {
+                color: ownerState.type === "add" ? "#54BAB9" : "#EDC339", // Label color on hover
+              },
+              "& .MuiInputBase-input": {
+                fontSize: "0.875rem", // 14px
+                fontWeight: 400, // Regular
+                color: "black", // Text color
+              },
+            };
+          }
+        },
+      },
+    },
     MuiDataGrid: {
       styleOverrides: {
         root: {
@@ -75,15 +121,16 @@ const theme = createTheme({
           "& .MuiTablePagination-toolbar": {
             color: "#000000",
           },
-          "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows": {
-            color: "#000000",
-            fontSize: "0.875rem",
-            fontWeight: 400,
-          },
+          "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
+            {
+              color: "#000000",
+              fontSize: "0.875rem",
+              fontWeight: 400,
+            },
           "& .MuiTablePagination-select": {
             color: "#000000",
             fontSize: "0.875rem",
-            fontWeight: 400, 
+            fontWeight: 400,
           },
           "& .MuiTablePagination-selectIcon": {
             color: "#54BAB9", // Dropdown arrow color
@@ -131,12 +178,39 @@ const theme = createTheme({
     },
     MuiTablePagination: {
       styleOverrides: {
-        menuItem:{
+        menuItem: {
           color: "#000000",
           fontSize: "0.875rem",
-          fontWeight: 400, 
-        }
-      }
+          fontWeight: 400,
+        },
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        option: {
+          fontSize: "0.875rem", // 14px
+          fontWeight: 400, // Regular
+          color: "black",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "fade",
+          fontSize: "0.875rem",
+          fontWeight: 600,
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontSize: "0.875rem",
+          fontWeight: 400,
+          color: "black",
+        },
+      },
     },
   },
 });

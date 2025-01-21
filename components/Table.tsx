@@ -10,6 +10,7 @@ import { MoreVert } from "@mui/icons-material";
 import { useSearchContext } from "@/app/manage/users/layout";
 import FormModal from "./FormModal";
 import DialogBox from "./DialogBox";
+import { deleteDoctor, fetchDoctors } from "@/api/doctorAPI";
 
 const PatientColumns: GridColDef[] = [
   { field: "id", headerName: "Pet ID", width: 70 },
@@ -84,9 +85,12 @@ const ActionsMenu = ({ row }) => {
     if (type === "patients") {
       await deletePatient(data.id);
       handleAlertOpen("Patient delete sucessfully");
-    } else {
+    } else if (type === "owners") {
       await deleteUser(data.id);
       handleAlertOpen("Pawrent delete sucessfully");
+    } else {
+      await deleteDoctor(data.id);
+      handleAlertOpen("Doctor delete successfully");
     }
     setIsDialogOpen(false);
     handleClose();
@@ -136,24 +140,35 @@ export default function DataTable({ type }: { type: string }) {
   React.useEffect(() => {
     const fetch = async () => {
       setLoading(true);
-      const data =
-        type === "patients"
-          ? await fetchPatients({
-              type,
-              size: paginationModel.pageSize,
-              page: paginationModel.page,
-              search: search,
-              status: status,
-              breed: breed,
-            })
-          : await fetchOwners({
-              type,
-              size: paginationModel.pageSize,
-              page: paginationModel.page,
-              search: search,
-              city: city,
-              township: township,
-            });
+      let data;
+      if (type === "patients") {
+        data = await fetchPatients({
+          type,
+          size: paginationModel.pageSize,
+          page: paginationModel.page,
+          search: search,
+          status: status,
+          breed: breed,
+        });
+      } else if (type === "owners") {
+        data = await fetchOwners({
+          type,
+          size: paginationModel.pageSize,
+          page: paginationModel.page,
+          search: search,
+          city: city,
+          township: township,
+        });
+      } else {
+        data = await fetchDoctors({
+          type,
+          size: paginationModel.pageSize,
+          page: paginationModel.page,
+          search: search,
+          city: city,
+          township: township,
+        });
+      }
       setRows(data.content);
       setRowCount(data.totalElements);
       setType(type);

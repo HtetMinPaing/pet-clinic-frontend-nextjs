@@ -1,5 +1,5 @@
 "use client";
-import { PatientForm, UserForm } from "@/components/FormModal";
+import { DoctorForm, PatientForm, UserForm } from "@/components/FormModal";
 import TabsWrapper from "@/components/UserTab";
 import { Alert, Snackbar, Typography } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
@@ -51,6 +51,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       description: "",
     });
   };
+  const ChooseForm = () => {
+    if (type === "patients") {
+      return <PatientForm />
+    } else if (type === "owners") {
+      return <UserForm />
+    } else {
+      return <DoctorForm />
+    }
+  }
   return (
     <SearchContext.Provider
       value={{
@@ -81,7 +90,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Typography>
       <TabsWrapper />
       {children}
-      {type === "patients" ? <PatientForm /> : <UserForm />}
+      <ChooseForm />
       {alert.isOpen && (
         <Snackbar
           open={alert.isOpen}
