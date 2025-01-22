@@ -303,7 +303,7 @@ export const UserForm = () => {
         <Button
           variant="contained"
           color={isModalOpen.type === "update" ? "warning" : "primary"}
-          sx={{typography: "subtitle2", color: "white"}}
+          sx={{ typography: "subtitle2", color: "white" }}
           type="submit"
         >
           {isModalOpen.type}
@@ -513,7 +513,7 @@ export const PatientForm = () => {
         <Button
           variant="contained"
           color={isModalOpen.type === "update" ? "warning" : "primary"}
-          sx={{typography: "subtitle2", color: "white"}}
+          sx={{ typography: "subtitle2", color: "white" }}
           type="submit"
         >
           {isModalOpen.type}
@@ -699,7 +699,260 @@ export const DoctorForm = () => {
         <Button
           variant="contained"
           color={isModalOpen.type === "update" ? "warning" : "primary"}
-          sx={{typography: "subtitle2", color: "white"}}
+          sx={{ typography: "subtitle2", color: "white" }}
+          type="submit"
+        >
+          {isModalOpen.type}
+        </Button>
+      </Box>
+    </Modal>
+  );
+};
+
+const patientData = {
+  petName: "",
+  status: "",
+  breed: "",
+  gender: "",
+  dateOfBirth: "",
+  pawrentEmail: "",
+};
+
+const userData = {
+  fullName: "",
+  email: "",
+  contactPhone: "",
+  address: "",
+  city: "",
+  township: "",
+};
+
+export const FormModal = (type: string) => {
+  const [formData, setFormData] = useState(
+    type === "patients" ? patientData : userData
+  );
+  const { isModalOpen, handleModalClose, handleAlertOpen } = useSearchContext();
+  const formType = isModalOpen.type;
+  useEffect(() => {
+    if (isModalOpen.rowData && Object.keys(isModalOpen.rowData).length > 0) {
+      setFormData({ ...isModalOpen.rowData });
+    }
+  }, [isModalOpen]);
+
+  const submitDoctorData = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Form Data: ", formData);
+    const data =
+      isModalOpen.type === "update"
+        ? await updateDoctor(isModalOpen.rowData.id, formData)
+        : await addDoctor(formData);
+    handleAlertOpen(
+      isModalOpen.type === "update"
+        ? "Doctor Update successfully"
+        : "Doctor register sucessfully"
+    );
+    handleClose();
+  };
+
+  const submitPatientData = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Form Data: ", formData);
+    const data =
+      isModalOpen.type === "update"
+        ? await updatePatient(isModalOpen.rowData.id, formData)
+        : await addPatient(formData);
+    handleAlertOpen(
+      isModalOpen.type === "update"
+        ? "Patient Update successfully"
+        : "Patient register sucessfully"
+    );
+    console.log("Submit Data: ", data);
+    handleClose();
+  };
+
+  const submitPawrentData = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Form Data: ", formData);
+    const data =
+      isModalOpen.type === "update"
+        ? await updateUser(isModalOpen.rowData.id, formData)
+        : await addUser(formData);
+    handleAlertOpen(
+      isModalOpen.type === "update"
+        ? "Pawrent Update successfully"
+        : "Pawrent register sucessfully"
+    );
+    console.log("Submit Data: ", data);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setFormData(type === "patients" ? patientData : userData);
+    handleModalClose();
+  };
+
+  const handleSubmit = (e) => {
+    if (type === "patients") {
+      submitPatientData(e);
+    } else if (type === "owners") {
+      submitPawrentData(e);
+    } else {
+      submitDoctorData(e);
+    }
+  };
+
+  return (
+    <Modal
+      open={isModalOpen.isOpen}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box
+        component="form"
+        onSubmit={(e) => handleSubmit(e)}
+        sx={formContainerStyle}
+      >
+        <Typography
+          variant="header1"
+          textAlign="center"
+          color={isModalOpen.type === "update" ? "warning" : "primary"}
+          gutterBottom
+        >
+          {isModalOpen.type === "update"
+            ? `Update existing ${type.slice(-1)}`
+            : `Add new doctor ${type.slice(-1)}`}
+        </Typography>
+        {type !== "patients" && (
+          <FormControl fullWidth>
+            <TextField
+              label="Full Name"
+              variant="outlined"
+              name="fullName"
+              value={formData.fullName}
+              type={formType}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, fullName: e.target.value }))
+              }
+              sx={textFieldStyle}
+              required
+            />
+          </FormControl>
+        )}
+        {type !== "patients" && (
+          <FormControl fullWidth>
+            <TextField
+              label="Email"
+              variant="outlined"
+              name="email"
+              value={formData.email}
+              type={formType}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, email: e.target.value }))
+              }
+              sx={textFieldStyle}
+              required
+            />
+          </FormControl>
+        )}
+        {type !== "patients" && (
+          <FormControl fullWidth>
+            <TextField
+              label="Contact Phone"
+              variant="outlined"
+              name="contactPhone"
+              value={formData.contactPhone}
+              type={formType}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  contactPhone: e.target.value,
+                }))
+              }
+              sx={textFieldStyle}
+              required
+            />
+          </FormControl>
+        )}
+        {type !== "patients" && (
+          <FormControl fullWidth>
+            <InputLabel id="city" sx={inputLabelStyle}>
+              City
+            </InputLabel>
+            <Select
+              labelId="city"
+              id="city"
+              name="city"
+              label="city"
+              value={formData.city}
+              type={formType}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, city: e.target.value }))
+              }
+              sx={selectStyle}
+              required
+            >
+              {["Yangon", "Mandalay"].map((city) => (
+                <MenuItem value={city} key={city} sx={menuStyle}>
+                  {city}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
+        {type !== "patients" && (
+          <FormControl fullWidth>
+            <InputLabel id="township" sx={inputLabelStyle}>
+              Township
+            </InputLabel>
+            <Select
+              labelId="township"
+              id="township"
+              name="township"
+              label="township"
+              value={formData.township}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, township: e.target.value }))
+              }
+              sx={selectStyle}
+              required
+            >
+              {formData.city
+                ? formData.city === "Yangon"
+                  ? yangonTownships.map((city) => (
+                      <MenuItem value={city} key={city} sx={menuStyle}>
+                        {city}
+                      </MenuItem>
+                    ))
+                  : mandalayTownships.map((city) => (
+                      <MenuItem value={city} key={city} sx={menuStyle}>
+                        {city}
+                      </MenuItem>
+                    ))
+                : ""}
+            </Select>
+          </FormControl>
+        )}
+        {type !== "patients" && (
+          <FormControl fullWidth>
+            <TextField
+              label="Address"
+              variant="outlined"
+              name="address"
+              value={formData.address}
+              type={formType}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, address: e.target.value }))
+              }
+              sx={textFieldStyle}
+              required
+            />
+          </FormControl>
+        )}
+        <Button
+          variant="contained"
+          color={isModalOpen.type === "update" ? "warning" : "primary"}
+          sx={{ typography: "subtitle2", color: "white" }}
           type="submit"
         >
           {isModalOpen.type}
