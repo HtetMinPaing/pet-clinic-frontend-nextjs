@@ -1,7 +1,7 @@
 "use client";
 import { DoctorForm, PatientForm, UserForm } from "@/components/FormModal";
 import TabsWrapper from "@/components/UserTab";
-import { Alert, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
 
 const SearchContext = createContext<any>(null);
@@ -53,13 +53,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
   const ChooseForm = () => {
     if (type === "patients") {
-      return <PatientForm />
+      return <PatientForm />;
     } else if (type === "owners") {
-      return <UserForm />
+      return <UserForm />;
     } else {
-      return <DoctorForm />
+      return <DoctorForm />;
     }
-  }
+  };
   return (
     <SearchContext.Provider
       value={{
@@ -85,24 +85,26 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         handleAlertClose,
       }}
     >
-      <Typography color="primary" variant="body1" margin="0.875rem">
-        {type.charAt(0).toUpperCase() + type.slice(1) + " List"}
-      </Typography>
-      <TabsWrapper />
-      {children}
-      <ChooseForm />
-      {alert.isOpen && (
-        <Snackbar
-          open={alert.isOpen}
-          onClose={handleAlertClose}
-          autoHideDuration={5000}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        >
-          <Alert severity="success" onClose={handleAlertClose}>
-            {alert.description}
-          </Alert>
-        </Snackbar>
-      )}
+      <Box sx={{paddingTop: "0.875rem"}}>
+        <Typography color="primary" variant="header1" margin="0.875rem">
+          {type.charAt(0).toUpperCase() + type.slice(1) + " List"}
+        </Typography>
+        <TabsWrapper />
+        {children}
+        <ChooseForm />
+        {alert.isOpen && (
+          <Snackbar
+            open={alert.isOpen}
+            onClose={handleAlertClose}
+            autoHideDuration={5000}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          >
+            <Alert severity="success" onClose={handleAlertClose}>
+              {alert.description}
+            </Alert>
+          </Snackbar>
+        )}
+      </Box>
     </SearchContext.Provider>
   );
 };

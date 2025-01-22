@@ -19,7 +19,7 @@ const DialogBox = ({ isDialogOpen, closeDialog, confirmDelete }) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle sx={{ typography: "body1", color: "#CD211D" }} id="alert-dialog-title">
+      <DialogTitle sx={{ typography: "header1", color: "#CD211D" }} id="alert-dialog-title">
         {"Confirm Delete"}
       </DialogTitle>
       <DialogContent>

@@ -3,6 +3,7 @@ import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { fontGrid } from "@mui/material/styles/cssUtils";
+import { Padding } from "@mui/icons-material";
 
 const theme = createTheme({
   palette: {
@@ -43,7 +44,7 @@ const theme = createTheme({
     //   fontSize: "2rem", // Default 32px
     //   fontWeight: 600, // Semibold
     // },
-    body1: {
+    header1: {
       fontSize: "1.375rem", // 22px
       fontWeight: 600, // Semibold
     },

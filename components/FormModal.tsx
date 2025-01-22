@@ -180,7 +180,7 @@ export const UserForm = () => {
     >
       <Box component="form" onSubmit={handleSubmit} sx={formContainerStyle}>
         <Typography
-          variant="body1"
+          variant="header1"
           textAlign="center"
           color={isModalOpen.type === "update" ? "warning" : "primary"}
           gutterBottom
@@ -375,7 +375,7 @@ export const PatientForm = () => {
     >
       <Box component="form" onSubmit={handleSubmit} sx={formContainerStyle}>
         <Typography
-          variant="body1"
+          variant="header1"
           textAlign="center"
           color={isModalOpen.type === "update" ? "warning" : "primary"}
           gutterBottom
@@ -576,7 +576,7 @@ export const DoctorForm = () => {
     >
       <Box component="form" onSubmit={handleSubmit} sx={formContainerStyle}>
         <Typography
-          variant="body1"
+          variant="header1"
           textAlign="center"
           color={isModalOpen.type === "update" ? "warning" : "primary"}
           gutterBottom
